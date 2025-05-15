@@ -1,6 +1,6 @@
-### CRUD Mongo DB API
+# CRUD Mongo DB API
 
-So basically to run the crud API, here is what you need to run in the terminal to setup.
+### So basically to run the crud API, here is what you need to run in the terminal to setup.
 
 
 i) npm init -y
@@ -18,10 +18,10 @@ vi) npm install mongodb
 vii) npm install mongoose
 
 
-Node version: v20.19.0
+### Node version: v20.19.0
 
 
-Things to note:
+### Things to note:
 
 i) In Postman, always run http://localhost:3000/ for the front part of the endpoint link. 
 
