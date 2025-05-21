@@ -22,4 +22,4 @@ Content-Type: application/json
 
 ### Call protected route with JWT (replace token below after login)
 GET http://localhost:3000/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IldlZSIsInN1YiI6IjY4MmQ0OGI1YTExNjM4ZjMyMWFlMjdlNiIsImlhdCI6MTc0Nzc5ODIwNSwiZXhwIjoxNzQ3ODAxODA1fQ.VH169lxxkgZc-LLhUbx2YOd_TwNbtvRveyc55p-s-jY
+Authorization: Bearer 
