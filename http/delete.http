@@ -1,1 +1,2 @@
 DELETE http://localhost:3000/products/682add0e39e65bc11eda3c1c
+Authorization: Bearer 

@@ -14,6 +14,7 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const mongoose_1 = require("@nestjs/mongoose");
 const product_module_1 = require("./product/product.module");
+const auth_module_1 = require("./auth/auth.module");
 const mongoose_2 = __importDefault(require("mongoose"));
 let AppModule = class AppModule {
 };
@@ -23,7 +24,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
             mongoose_1.MongooseModule.forRootAsync({
-                imports: [config_1.ConfigModule],
+                imports: [config_1.ConfigModule, auth_module_1.AuthModule],
                 inject: [config_1.ConfigService],
                 useFactory: async (configService) => {
                     const uri = configService.get('MONGODB_URI');

@@ -1,4 +1,5 @@
 PUT http://localhost:3000/products/682adc08ba2fa0018aa74a9b
+Authorization: Bearer 
 Content-Type: application/json
 
 {

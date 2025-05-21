@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Body, Put, Delete, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Product } from './schemas/product.schema';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'; 
 
+@UseGuards(JwtAuthGuard) // Protects all routes under /products
 @Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -22,12 +33,12 @@ export class ProductController {
   }
 
   @Put(':id')
-update(@Param('id') id: string, @Body() updateData: Partial<Product>) {
-  return this.productService.update(id, updateData);
-}
+  update(@Param('id') id: string, @Body() updateData: Partial<Product>) {
+    return this.productService.update(id, updateData);
+  }
 
-@Delete(':id')
-remove(@Param('id') id: string) {
-  return this.productService.remove(id);
-}
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.productService.remove(id);
+  }
 }

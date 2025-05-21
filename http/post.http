@@ -1,8 +1,9 @@
 POST http://localhost:3000/products
+Authorization: Bearer 
 Content-Type: application/json
 
 {
-  "name": "Chips",
-  "quantity": 30,
-  "price": 2.99
+  "name": "Coffee",
+  "quantity": 20,
+  "price": 3.99
 }
