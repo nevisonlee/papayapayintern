@@ -1,3 +1,5 @@
+// Handles HTTP requests related to authentications like POST /register, POST /login, GET /verify.
+
 import { Controller, Post, Body, Get, UseGuards, Req, Query, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
