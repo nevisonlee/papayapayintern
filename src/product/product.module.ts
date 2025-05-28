@@ -1,3 +1,5 @@
+// The module that groups together product controller, service, schema, and dependencies.
+
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductService } from './product.service';
