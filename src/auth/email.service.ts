@@ -1,3 +1,5 @@
+// Sends verification emails (Using nodemailer).
+
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { ConfigService } from '@nestjs/config';
