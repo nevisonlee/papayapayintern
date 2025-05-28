@@ -1,3 +1,5 @@
+// Contains business logic for product creation, retrieval, updating, and deletion.
+
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
