@@ -12,9 +12,12 @@ const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const passport_1 = require("@nestjs/passport");
 const auth_service_1 = require("./auth.service");
+const mongoose_1 = require("@nestjs/mongoose");
 const auth_controller_1 = require("./auth.controller");
+const user_schema_1 = require("../users/user.schema");
 const users_module_1 = require("../users/users.module");
 const jwt_strategy_1 = require("./jwt.strategy");
+const email_service_1 = require("./email.service");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -32,8 +35,9 @@ exports.AuthModule = AuthModule = __decorate([
                     signOptions: { expiresIn: configService.get('JWT_EXPIRES_IN') || '1h' },
                 }),
             }),
+            mongoose_1.MongooseModule.forFeature([{ name: user_schema_1.User.name, schema: user_schema_1.UserSchema }])
         ],
-        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy],
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, email_service_1.EmailService],
         controllers: [auth_controller_1.AuthController],
     })
 ], AuthModule);

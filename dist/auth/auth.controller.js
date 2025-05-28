@@ -14,11 +14,18 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
+const common_2 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
+const mongoose_1 = require("@nestjs/mongoose");
+const jwt_1 = require("@nestjs/jwt");
+const mongoose_2 = require("mongoose");
+const user_schema_1 = require("../users/user.schema");
 let AuthController = class AuthController {
-    constructor(authService) {
+    constructor(authService, jwtService, userModel) {
         this.authService = authService;
+        this.jwtService = jwtService;
+        this.userModel = userModel;
     }
     async register(body) {
         return this.authService.register(body);
@@ -26,12 +33,27 @@ let AuthController = class AuthController {
     async login(body) {
         const user = await this.authService.validateUser(body.username, body.password);
         if (!user) {
-            throw new Error('Invalid username or password');
+            throw new common_2.UnauthorizedException('Invalid username or password');
         }
         return this.authService.login(user);
     }
     getProfile(req) {
         return req.user;
+    }
+    async verifyEmail(token) {
+        try {
+            const payload = this.jwtService.verify(token);
+            const user = await this.userModel.findOne({ email: payload.email });
+            if (!user) {
+                throw new common_2.UnauthorizedException('User not found');
+            }
+            user.verified = true;
+            await user.save();
+            return { message: 'Email successfully verified!' };
+        }
+        catch (error) {
+            throw new common_1.BadRequestException('Invalid or expired verification link');
+        }
     }
 };
 exports.AuthController = AuthController;
@@ -57,7 +79,17 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "getProfile", null);
+__decorate([
+    (0, common_1.Get)('verify'),
+    __param(0, (0, common_1.Query)('token')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verifyEmail", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __param(2, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
+    __metadata("design:paramtypes", [auth_service_1.AuthService,
+        jwt_1.JwtService,
+        mongoose_2.Model])
 ], AuthController);

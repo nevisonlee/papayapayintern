@@ -41,56 +41,34 @@ var __importStar = (this && this.__importStar) || (function () {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthService = void 0;
+exports.EmailService = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
-const users_service_1 = require("../users/users.service");
-const bcrypt = __importStar(require("bcrypt"));
-const email_service_1 = require("./email.service");
-let AuthService = class AuthService {
-    constructor(usersService, jwtService, emailService) {
-        this.usersService = usersService;
-        this.jwtService = jwtService;
-        this.emailService = emailService;
+const nodemailer = __importStar(require("nodemailer"));
+const config_1 = require("@nestjs/config");
+let EmailService = class EmailService {
+    constructor(configService) {
+        this.configService = configService;
+        this.transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: this.configService.get('EMAIL_USER'),
+                pass: this.configService.get('EMAIL_PASS'),
+            },
+        });
     }
-    async validateUser(username, pass) {
-        const user = await this.usersService.findByUsername(username);
-        if (user && await bcrypt.compare(pass, user.password)) {
-            const _a = user.toObject(), { password } = _a, result = __rest(_a, ["password"]);
-            return result;
-        }
-        return null;
-    }
-    async login(user) {
-        const payload = { username: user.username, sub: user._id };
-        return {
-            access_token: this.jwtService.sign(payload),
-        };
-    }
-    async register(userDto) {
-        const hashedPassword = await bcrypt.hash(userDto.password, 10);
-        const user = await this.usersService.create(Object.assign(Object.assign({}, userDto), { password: hashedPassword, verified: false }));
-        const token = this.jwtService.sign({ email: user.email }, { secret: process.env.JWT_SECRET, expiresIn: '1d' });
-        await this.emailService.sendVerificationEmail(user.email, token);
-        return { message: 'User registered. Please check your email to verify your account.' };
+    async sendVerificationEmail(email, token) {
+        const verificationLink = `https://automatic-succotash-5gwx96prj74fvxwj-3000.app.github.dev/auth/verify?token=${token}`;
+        await this.transporter.sendMail({
+            from: this.configService.get('EMAIL_FROM'),
+            to: email,
+            subject: 'Email Verification',
+            html: `<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`,
+        });
     }
 };
-exports.AuthService = AuthService;
-exports.AuthService = AuthService = __decorate([
+exports.EmailService = EmailService;
+exports.EmailService = EmailService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [users_service_1.UsersService,
-        jwt_1.JwtService,
-        email_service_1.EmailService])
-], AuthService);
+    __metadata("design:paramtypes", [config_1.ConfigService])
+], EmailService);

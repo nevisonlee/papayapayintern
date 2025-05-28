@@ -3,7 +3,7 @@ Authorization: Bearer
 Content-Type: application/json
 
 {
-  "name": "Coffee",
-  "quantity": 20,
-  "price": 3.99
+  "name": "Orange",
+  "quantity": 40,
+  "price": 2.99
 }
