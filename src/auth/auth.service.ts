@@ -1,3 +1,5 @@
+// Contains business logic for registration, login, JWT token generation, and user validation.
+
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
