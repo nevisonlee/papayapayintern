@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
-const common_2 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
 const mongoose_1 = require("@nestjs/mongoose");
@@ -33,7 +32,10 @@ let AuthController = class AuthController {
     async login(body) {
         const user = await this.authService.validateUser(body.username, body.password);
         if (!user) {
-            throw new common_2.UnauthorizedException('Invalid username or password');
+            throw new common_1.UnauthorizedException('Invalid username or password');
+        }
+        if (!user.verified) {
+            throw new common_1.UnauthorizedException('Please verify your email before logging in');
         }
         return this.authService.login(user);
     }
@@ -43,11 +45,12 @@ let AuthController = class AuthController {
     async verifyEmail(token) {
         try {
             const payload = this.jwtService.verify(token);
-            const user = await this.userModel.findOne({ email: payload.email });
+            const user = await this.userModel.findById(payload.userId);
             if (!user) {
-                throw new common_2.UnauthorizedException('User not found');
+                throw new common_1.UnauthorizedException('User not found');
             }
             user.verified = true;
+            console.log('Before saving user:', user);
             await user.save();
             return { message: 'Email successfully verified!' };
         }

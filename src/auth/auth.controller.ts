@@ -27,6 +27,10 @@ export class AuthController {
     if (!user) {
       throw new UnauthorizedException('Invalid username or password');
     }
+
+    if (!user.verified) {
+      throw new UnauthorizedException('Please verify your email before logging in');
+    }
     return this.authService.login(user);
   }
 
@@ -40,13 +44,14 @@ export class AuthController {
   async verifyEmail(@Query('token') token: string) {
     try {
       const payload = this.jwtService.verify(token);
-      const user = await this.userModel.findOne({ email: payload.email });
+      const user = await this.userModel.findById(payload.userId);
 
       if (!user) {
         throw new UnauthorizedException('User not found');
       }
 
       user.verified = true;
+      console.log('Before saving user:', user);
       await user.save();
 
       return { message: 'Email successfully verified!' };

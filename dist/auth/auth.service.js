@@ -67,6 +67,7 @@ let AuthService = class AuthService {
     }
     async validateUser(username, pass) {
         const user = await this.usersService.findByUsername(username);
+        console.log('Logging in user:', user);
         if (user && await bcrypt.compare(pass, user.password)) {
             const _a = user.toObject(), { password } = _a, result = __rest(_a, ["password"]);
             return result;
@@ -82,7 +83,7 @@ let AuthService = class AuthService {
     async register(userDto) {
         const hashedPassword = await bcrypt.hash(userDto.password, 10);
         const user = await this.usersService.create(Object.assign(Object.assign({}, userDto), { password: hashedPassword, verified: false }));
-        const token = this.jwtService.sign({ email: user.email }, { secret: process.env.JWT_SECRET, expiresIn: '1d' });
+        const token = this.jwtService.sign({ userId: user._id }, { secret: process.env.JWT_SECRET, expiresIn: '1d' });
         await this.emailService.sendVerificationEmail(user.email, token);
         return { message: 'User registered. Please check your email to verify your account.' };
     }

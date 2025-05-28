@@ -3,9 +3,9 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-  "username": "NevisonTest3",
-  "password": "Testing3",
-  "email": "leenevison123@gmail.com"
+  "username": "NevisonTest11",
+  "password": "Testing11",
+  "email": "leenevison516@gmail.com"
 }
 
 ###
@@ -15,9 +15,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "username": "NevisonTest4",
-  "password": "Testing3",
-  "email": "leenevison123@gmail.com"
+  "username": "NevisonTest11",
+  "password": "Testing11"
 }
 
 ###

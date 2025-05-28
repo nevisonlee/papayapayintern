@@ -14,6 +14,9 @@ export class AuthService {
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findByUsername(username);
+
+    console.log('Logging in user:', user);
+
     if (user && await bcrypt.compare(pass, user.password)) {
       const { password, ...result } = user.toObject();
       return result;
@@ -40,7 +43,7 @@ async register(userDto: any) {
 
   // Generate verification token
   const token = this.jwtService.sign(
-    { email: user.email },
+    { userId: user._id },
     { secret: process.env.JWT_SECRET, expiresIn: '1d' }
   );
 
