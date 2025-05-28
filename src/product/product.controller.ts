@@ -1,3 +1,5 @@
+// Exposes endpoints like POST /products, GET /products, PUT /products/:id, etc.
+
 import {
   Controller,
   Get,
